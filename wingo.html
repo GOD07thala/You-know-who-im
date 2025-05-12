@@ -3,69 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>91 Club Prediction with Button</title>
+  <title>91 Club Auto Prediction</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: #0f0f0f;
-      font-family: Arial, sans-serif;
-      color: white;
+      background: #0c0c0c;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
     }
     .container {
       max-width: 600px;
-      margin: 50px auto;
-      background: #111;
-      padding: 20px;
+      margin: 40px auto;
+      padding: 25px;
+      background: linear-gradient(135deg, #1c1c1c, #2d2d2d);
       border-radius: 15px;
-      border: 2px solid orange;
-      box-shadow: 0 0 15px orange;
+      box-shadow: 0 0 20px orange;
       text-align: center;
+      border: 2px solid orange;
     }
     h1 {
       color: orange;
+      font-size: 26px;
+      margin-bottom: 15px;
     }
-    #auto-period, #result {
-      margin: 10px 0;
+    #auto-period {
       font-size: 18px;
+      margin-bottom: 10px;
+    }
+    #result {
+      font-size: 20px;
+      margin-bottom: 15px;
     }
     #result span {
       font-weight: bold;
     }
-    .predict-button {
-      background-color: orange;
-      color: black;
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      margin-top: 15px;
-      cursor: pointer;
-    }
     .history {
       text-align: left;
-      margin-top: 20px;
       max-height: 300px;
       overflow-y: auto;
       background: rgba(255,255,255,0.05);
       padding: 10px;
       border-radius: 10px;
+      border: 1px solid #444;
     }
     .entry {
-      margin-bottom: 5px;
-      font-size: 14px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      padding: 5px;
+      border-bottom: 1px solid #333;
+    }
+    .entry strong {
+      color: #ffa500;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>91 Club Prediction</h1>
+    <h1>91 Club Auto Prediction</h1>
     <div id="auto-period">Auto Period: Loading...</div>
     <div id="result">Result: <span>Loading...</span></div>
-    <button class="predict-button">🔮 Prediction</button>
     <div class="history" id="history">
-      <strong>🔁 Prediction History</strong><br>
+      <strong>🔁 Prediction History</strong><br><br>
     </div>
   </div>
 
@@ -80,33 +79,29 @@
       return currentDate + '01' + formattedMinutes;
     }
 
+    function fetch91ClubResultSimulated() {
+      // 🔁 Simulate 91 Club actual result (You can replace this with API call)
+      return Math.random() < 0.5 ? 'SMALL' : 'BIG';
+    }
+
     function generatePrediction() {
       const period = getAutoPeriod();
-      if (period === lastPeriod) {
-        alert("Please wait for the next period.");
-        return;
-      }
+      if (period === lastPeriod) return;
       lastPeriod = period;
 
       const prediction = Math.random() < 0.5 ? 'SMALL' : 'BIG';
-      const actualResult = Math.random() < 0.5 ? 'SMALL' : 'BIG';
+      const actualResult = fetch91ClubResultSimulated();
       const winLoss = prediction === actualResult ? 'WIN' : 'LOSS';
       const color = winLoss === 'WIN' ? 'limegreen' : 'red';
 
       document.getElementById('auto-period').textContent = `Auto Period: ${period}`;
-      document.getElementById('result').innerHTML = `Result: <span style="color:${color};">${prediction} (${winLoss})</span>`;
+      document.getElementById('result').innerHTML = `
+        Result: <span style="color:${color};">${prediction} (${winLoss})</span>`;
 
       const entry = document.createElement('div');
       entry.className = 'entry';
       entry.innerHTML = `
-        ➤ Period: <strong>${period}</strong> | Prediction: <strong>${prediction}</strong> | 
-        Actual: <strong>${actualResult}</strong> | 
-        <strong style="color:${color}">${winLoss}</strong>`;
-      document.getElementById('history').prepend(entry);
-    }
-
-    // Prediction on button click
-    document.querySelector('.predict-button').addEventListener('click', generatePrediction);
-  </script>
-</body>
-</html>
+        ➤ Period: <strong>${period}</strong><br>
+        Prediction: <strong>${prediction}</strong> |
+        Actual: <
+    
