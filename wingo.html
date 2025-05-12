@@ -1,0 +1,56 @@
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let lastPeriod = '';
+  const historyDiv = document.getElementById('history');
+
+  function generatePrediction() {
+    const now = new Date();
+    const totalMinutes = now.getHours() * 60 + now.getMinutes() + 1;
+    const formattedMinutes = String(totalMinutes).padStart(4, '0');
+    const currentDate = now.toISOString().split('T')[0].replace(/-/g, '');
+    const autoPeriod = currentDate + '01' + formattedMinutes;
+
+    if (autoPeriod === lastPeriod) return;
+
+    lastPeriod = autoPeriod;
+
+    // Random Prediction
+    const prediction = Math.random() < 0.5 ? 'SMALL' : 'BIG';
+
+    // Simulate 91Club Actual Result (Replace with real API)
+    const actualResult = Math.random() < 0.5 ? 'SMALL' : 'BIG';
+
+    const winLoss = prediction === actualResult ? 'WIN' : 'LOSS';
+    const resultColor = winLoss === 'WIN' ? 'limegreen' : 'red';
+
+    // Update main display
+    document.getElementById('auto-period').textContent = `API: ${autoPeriod}`;
+    document.getElementById('result').textContent = `RESULT: ${prediction} (${winLoss})`;
+
+    // Add to history
+    const entry = document.createElement('div');
+    entry.className = 'history-entry';
+    entry.innerHTML = `
+      <span><strong>Period:</strong> ${autoPeriod}</span>
+      <span><strong>Prediction:</strong> ${prediction}</span>
+      <span><strong>Actual:</strong> ${actualResult}</span>
+      <span style="color:${resultColor};"><strong>${winLoss}</strong></span>
+    `;
+    historyDiv.prepend(entry);
+  }
+
+  // 🔁 Auto Predict Every 60 Seconds
+  generatePrediction(); // First run
+  setInterval(generatePrediction, 60000); // Every 60 sec
+
+  // 🧹 Clear History Button
+  const clearBtn = document.createElement('button');
+  clearBtn.textContent = 'CLEAR HISTORY';
+  clearBtn.className = 'telegram-button';
+  clearBtn.onclick = () => {
+    historyDiv.innerHTML = '<h4>🔁 Prediction History</h4>';
+  };
+
+  document.querySelector('.buttons').appendChild(clearBtn);
+});
+</script>
