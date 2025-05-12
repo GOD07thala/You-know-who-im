@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>91 Club Auto Prediction</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f0f0f;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #111;
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid orange;
+      box-shadow: 0 0 15px orange;
+      text-align: center;
+    }
+    h1 {
+      color: orange;
+    }
+    #auto-period, #result {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+    #result span {
+      font-weight: bold;
+    }
+    .history {
+      text-align: left;
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.05);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .entry {
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>91 Club Auto Prediction</h1>
+    <div id="auto-period">Auto Period: Loading...</div>
+    <div id="result">Result: <span>Loading...</span></div>
+    <div class="history" id="history">
+      <strong>🔁 Prediction History</strong><br>
+    </div>
+  </div>
+
+  <script>
+    let lastPeriod = '';
+
+    function getAutoPeriod() {
+      const now = new Date();
+      const minutes = now.getHours() * 60 + now.getMinutes() + 1;
+      const formattedMinutes = String(minutes).padStart(4, '0');
+      const currentDate = now.toISOString().split('T')[0].replace(/-/g, '');
+      return currentDate + '01' + formattedMinutes;
+    }
+
+    function generatePrediction() {
+      const period = getAutoPeriod();
+      if (period === lastPeriod) return;
+      lastPeriod = period;
+
+      const prediction = Math.random() < 0.5 ? 'SMALL' : 'BIG';
+      const actualResult = Math.random() < 0.5 ? 'SMALL' : 'BIG';
+      const winLoss = prediction === actualResult ? 'WIN' : 'LOSS';
+      const color = winLoss === 'WIN' ? 'limegreen' : 'red';
+
+      document.getElementById('auto-period').textContent = `Auto Period: ${period}`;
+      document.getElementById('result').innerHTML = `Result: <span style="color:${color};">${prediction} (${winLoss})</span>`;
+
+      const entry = document.createElement('div');
+      entry.className = 'entry';
+      entry.innerHTML = `
+        ➤ Period: <strong>${period}</strong> | Prediction: <strong>${prediction}</strong> | 
+        Actual: <strong>${actualResult}</strong> | 
+        <strong style="color:${color}">${winLoss}</strong>`;
+      document.getElementById('history').prepend(entry);
+    }
+
+    // Run first time and every 60 seconds
+    generatePrediction();
+    setInterval(generatePrediction, 60000);
+  </script>
+</body>
+</html>
